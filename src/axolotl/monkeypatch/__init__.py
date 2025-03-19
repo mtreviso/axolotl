@@ -1,0 +1,3 @@
+from .patch_qwen_adasplash import apply_qwen_adasplash_patch
+
+apply_qwen_adasplash_patch()

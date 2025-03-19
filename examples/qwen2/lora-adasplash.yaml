@@ -1,0 +1,128 @@
+base_model: Qwen/Qwen2.5-0.5B
+model_type: AutoModelForCausalLM
+tokenizer_type: AutoTokenizer
+trust_remote_code: true
+
+load_in_8bit: false
+load_in_4bit: false
+strict: false
+
+bf16: true
+fp16:
+tf32: true
+
+xformers_attention:
+flash_attention: true
+sdp_attention:
+s2_attention:
+#flash_attn_cross_entropy: true
+#flash_attn_rms_norm: true
+
+torch_compile: true
+deepspeed:
+
+dataset_processes: 4
+
+pretraining_dataset:
+  - path: HuggingFaceFW/fineweb-edu
+    name: sample-10BT
+    split: train
+    text_column: text
+    type: pretrain
+    trust_remote_code: True
+    skip: # number of rows of data to skip over from the beginning
+
+
+#test_datasets:
+#  - path: HuggingFaceFW/fineweb-edu
+#    name: sample-10BT
+#    split: train
+#    type: pretrain
+#    text_column: text
+#    trust_remote_code: true
+#eval_strategy: steps
+#eval_steps: 1000  # eval every 1000 steps, for example
+eval_strategy: "no"
+eval_steps: 0
+
+output_dir: ./outputs/qwen25_lora_adasplash
+
+adapter: lora
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_fan_in_fan_out:
+lora_target_linear: false  # If true, will target all linear modules
+lora_target_modules:
+  - gate_proj
+  - down_proj
+  - up_proj
+  - q_proj
+  - v_proj
+  - k_proj
+  - o_proj
+lora_mlp_kernel: false
+lora_qkv_kernel: true
+lora_o_kernel: false
+peft_layers_to_transform: # The layer indices to transform, otherwise, apply to all layers
+
+
+# custom hyperparameter
+adasplash_alpha: 1.5
+use_alpha_scheduler: true
+alpha_scheduler_initial_alpha: 1.001
+alpha_scheduler_final_alpha: 1.5
+alpha_scheduler_max_steps: 76293
+alpha_scheduler_strategy: "linear"
+# 24 layers in total
+alpha_scheduler_layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+
+saves_per_epoch:
+save_steps: 1936
+sequence_len: 4096
+sample_packing: true
+pad_to_sequence_len: false
+max_steps: 19367
+gradient_accumulation_steps: 2
+micro_batch_size: 8
+num_epochs: 1
+optimizer: adamw_torch_fused
+lr_scheduler: cosine
+learning_rate: 2e-5
+train_on_inputs: false
+group_by_length: false
+gradient_checkpointing: true
+warmup_steps: 100
+
+
+
+fsdp:
+fsdp_config:
+  fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
+  fsdp_transformer_layer_cls_to_wrap: Qwen2DecoderLayer
+  fsdp_sharding_strategy: FULL_SHARD
+
+
+plugins:
+  - axolotl.integrations.cut_cross_entropy.CutCrossEntropyPlugin
+  - axolotl.integrations.liger.LigerPlugin
+
+cut_cross_entropy: true
+
+liger_rope: true
+liger_rms_norm: true
+liger_glu_activation: true
+liger_layer_norm: true
+#liger_fused_linear_cross_entropy: true
+
+
+
+special_tokens:
+
+# Comet configuration
+use_comet: True
+comet_api_key: "D5wDMnTugEFEqm2aibwQ088In"
+comet_workspace: "mtreviso"
+comet_project_name: "axolotl-adasplash"
+
+

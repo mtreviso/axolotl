@@ -35,11 +35,11 @@ wandb
 einops
 colorama
 numba
-numpy>=1.24.4,<=2.0.1
+numpy<2.0.1
 # qlora things
 evaluate==0.4.1
 scipy
-scikit-learn==1.4.2
+scikit-learn<1.4.3
 nvidia-ml-py==12.560.30
 art
 tensorboard
@@ -50,7 +50,7 @@ s3fs>=2024.5.0
 gcsfs>=2024.5.0
 # adlfs
 
-zstandard==0.22.0
+zstandard<0.22.1
 fastcore
 
 # lm eval harness

@@ -186,3 +186,5 @@ out/
 
 # vim
 *.swp
+
+triton/

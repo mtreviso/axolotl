@@ -188,6 +188,12 @@ class TrainerBuilderBase(abc.ABC):
                 SaveAxolotlConfigtoCometCallback(self.cfg.axolotl_config_path)
             )
 
+        if self.cfg.use_alpha_scheduler:
+            from axolotl.utils.callbacks.alpha_scheduler import AlphaSchedulerCallback
+
+            callbacks.append(AlphaSchedulerCallback(self.cfg))
+            self.model.config.adasplash_alpha = self.cfg.alpha_scheduler_initial_alpha
+
         return callbacks
 
     def get_post_trainer_create_callbacks(self, trainer):

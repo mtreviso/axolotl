@@ -33,6 +33,7 @@ from trl.models import unwrap_model_for_generation
 from axolotl.utils import is_comet_available, is_mlflow_available
 from axolotl.utils.bench import log_gpu_memory_usage
 from axolotl.utils.callbacks.perplexity import Perplexity
+from axolotl.utils.callbacks.alpha_scheduler import AlphaSchedulerCallback
 from axolotl.utils.config.models.input.v0_4_1 import AxolotlInputConfig
 from axolotl.utils.distributed import (
     barrier,

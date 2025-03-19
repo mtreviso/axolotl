@@ -927,6 +927,15 @@ class AxolotlInputConfig(
 
     plugins: Optional[List[str]] = Field(default=None)
 
+    # adasplash
+    adasplash_alpha: Optional[float] = 1.5
+    use_alpha_scheduler: Optional[bool] = None
+    alpha_scheduler_initial_alpha: Optional[float] = None
+    alpha_scheduler_final_alpha: Optional[float] = None
+    alpha_scheduler_max_steps: Optional[int] = None
+    alpha_scheduler_strategy: Optional[str] = None
+    alpha_scheduler_layers: Optional[List[int]] = None
+
     @field_validator("datasets", mode="before")
     @classmethod
     def deprecate_sharegpt_datasets(cls, datasets):
