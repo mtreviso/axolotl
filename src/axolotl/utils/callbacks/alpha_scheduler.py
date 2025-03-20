@@ -75,6 +75,7 @@ class AlphaSchedulerCallback(TrainerCallback):
         )
         self.alpha_scheduler_layers = self.cfg.alpha_scheduler_layers  # For layer-wise annealing
         self.comet_experiment = None
+        # self.total_tokens = 0
 
     def on_init_end(
         self,
@@ -87,6 +88,7 @@ class AlphaSchedulerCallback(TrainerCallback):
         if hasattr(model, 'config'):
             model.config.adasplash_alpha = self.alpha_scheduler.initial_alpha
             model.config.alpha_scheduler_layers = self.alpha_scheduler_layers
+            # self.total_tokens = 0
 
     def on_train_begin(
         self,
@@ -132,11 +134,15 @@ class AlphaSchedulerCallback(TrainerCallback):
             self.comet_experiment.log_metric(
                 "adasplash_alpha", new_alpha, step=state.global_step
             )
-            if effective_sequence_len is not None:
-                # Logging effective sequence length to Comet ML
-                self.comet_experiment.log_metric(
-                    "effective_sequence_len", effective_sequence_len, step=state.global_step
-                )
+            # if effective_sequence_len is not None:
+            #     # Logging effective sequence length to Comet ML
+            #     self.comet_experiment.log_metric(
+            #         "effective_sequence_len", effective_sequence_len, step=state.global_step
+            #     )
+            #     self.total_tokens += effective_sequence_len * args.per_device_train_batch_size
+            #     self.comet_experiment.log_metric(
+            #         "total_tokens", self.total_tokens, step=state.global_step
+            #     )
         elif is_main_process():
             LOG.warning("Comet experiment not initialized; skipping logging.")
 

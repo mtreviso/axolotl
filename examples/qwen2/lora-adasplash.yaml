@@ -78,12 +78,12 @@ alpha_scheduler_strategy: "linear"
 alpha_scheduler_layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 
 saves_per_epoch:
-save_steps: 1936
+save_steps: 1907
 sequence_len: 4096
 sample_packing: true
 pad_to_sequence_len: false
-max_steps: 19367
-gradient_accumulation_steps: 2
+max_steps: 19073
+gradient_accumulation_steps: 16
 micro_batch_size: 8
 num_epochs: 1
 optimizer: adamw_torch_fused

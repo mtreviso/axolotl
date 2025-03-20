@@ -58,14 +58,14 @@ def patched_qwen_attention_forward(
             else:
                 attention_interface = ALL_ATTENTION_FUNCTIONS[self.config._attn_implementation]
 
-    if self.layer_idx == 0:
-        # compute the effective sequence length for the first layer
-        eff_len = hidden_states.shape[1]
-        if attention_mask is not None:
-            mask = attention_mask[..., :eff_len]
-            valid_mask = mask[:, 0, 0] == 0 if mask.dim() > 2 else mask == 1
-            eff_len = valid_mask.sum(-1).long().mean().item()
-        setattr(self.config, "adasplash_effective_sequence_len", eff_len)
+    # if self.layer_idx == 0:
+    #     # compute the effective sequence length for the first layer
+    #     eff_len = hidden_states.shape[1]
+    #     if attention_mask is not None:
+    #         mask = attention_mask[..., :eff_len]
+    #         valid_mask = mask[:, 0, 0] == 0 if mask.dim() > 2 else mask == 1
+    #         eff_len = valid_mask.sum(-1).long().mean().item()
+    #     setattr(self.config, "adasplash_effective_sequence_len", eff_len)
 
     attn_output, attn_weights = attention_interface(
         self,
